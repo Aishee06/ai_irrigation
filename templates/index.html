@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Irrigation Predictor</title>
+    <!-- Link Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cover bg-gradient-to-r from-purple-500 to-pink-500 bg-center flex justify-center items-center h-screen" style="background-image: url('/bg.jpg');">
+    <div class="bg-white rounded-lg p-8 max-w-md shadow-md">
+        <h1 class="text-3xl mb-8 text-center font-bold text-gray-800">Smart Irrigation Predictor</h1>
+        <form id="weather-form">
+            <div class="mb-6">
+                <label for="temperature" class="block text-gray-700 text-sm font-bold mb-2">Temperature (°C):</label>
+                <input type="number" id="temperature" name="temperature" required class="form-input rounded-md border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full">
+            </div>
+            <div class="mb-6">
+                <label for="humidity" class="block text-gray-700 text-sm font-bold mb-2">Humidity (%):</label>
+                <input type="number" id="humidity" name="humidity" required class="form-input rounded-md border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full">
+            </div>
+            <div class="mb-6">
+                <label for="precipitation" class="block text-gray-700 text-sm font-bold mb-2">Precipitation (mm):</label>
+                <input type="number" id="precipitation" name="precipitation" required class="form-input rounded-md border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full">
+            </div>
+            <div class="mb-6">
+                <label for="soil-moisture" class="block text-gray-700 text-sm font-bold mb-2">Soil Moisture (%):</label>
+                <input type="number" id="soil-moisture" name="soil_moisture" required class="form-input rounded-md border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full">
+            </div>
+            <button type="button" onclick="predictIrrigationRequirement()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Predict Irrigation Requirement</button>
+        </form>
+        <p id="prediction-result" class="mt-4 text-center"></p>
+    </div>
+
+    <script>
+        function predictIrrigationRequirement() {
+            var temperature = document.getElementById('temperature').value;
+            var humidity = document.getElementById('humidity').value;
+            var precipitation = document.getElementById('precipitation').value;
+            var soilMoisture = document.getElementById('soil-moisture').value;
+
+            // Send weather data to server for prediction
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    temperature: temperature,
+                    humidity: humidity,
+                    precipitation: precipitation,
+                    soil_moisture: soilMoisture
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction-result').innerText = "Predicted Irrigation Requirement: " + data.prediction.toFixed(2) + " mm";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
