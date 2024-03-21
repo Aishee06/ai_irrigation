@@ -11,4 +11,11 @@ module.exports = {
     "./templates/**/*.html",
     "./static/**/*.js",
   ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        'hero': "url('/static/images/bg.jpg')",
+      },
+    },
+  },
 }
